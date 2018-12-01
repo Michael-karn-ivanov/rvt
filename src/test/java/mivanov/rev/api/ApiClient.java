@@ -41,4 +41,14 @@ public class ApiClient {
         topupRequest.setEntity(new StringEntity(new Gson().toJson(order)));
         return HttpClientBuilder.create().build().execute( topupRequest );
     }
+
+    public HttpResponse Deduct(String user, Double amount) throws IOException {
+        HttpPut spendRequest = new HttpPut(String.format("http://localhost:%d/spend", port));
+        spendRequest.addHeader("content-type", "application/json");
+        PaymentOrder order = new PaymentOrder();
+        order.setToUser(user);
+        order.setAmount(amount);
+        spendRequest.setEntity(new StringEntity(new Gson().toJson(order)));
+        return HttpClientBuilder.create().build().execute( spendRequest );
+    }
 }

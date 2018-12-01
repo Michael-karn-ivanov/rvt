@@ -98,6 +98,18 @@ public class Router {
                 throw exception;
             }
         });
+        put("/spend", ((request, response) -> {
+            try {
+                PaymentOrder order = new Gson().fromJson(request.body(), PaymentOrder.class);
+                response.status(
+                        injector.getInstance(MoneyController.class).DeductMoney(order.getToUser(), order.getAmount()).getValue()
+                );
+                return "";
+            } catch (Exception exception) {
+                logger.error(exception);
+                throw exception;
+            }
+        }));
     }
 
     public void Stop() {

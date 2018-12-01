@@ -1,20 +1,12 @@
 package mivanov.rev.api;
 
-import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
 import mivanov.rev.AppModule;
-import mivanov.rev.api.model.PaymentOrder;
 import mivanov.rev.model.User;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -83,5 +75,15 @@ public class UserControllerIT {
         apiClient.Topup(userId, 3.456);
         User user = apiClient.GetUser(userId);
         Assert.assertEquals(Double.valueOf(7.035), user.Balance);
+    }
+
+    @Test
+    public void testDeductFromTheOnlyBucketIfEnoughBalance() throws IOException {
+        String userId = UUID.randomUUID().toString();
+        apiClient.CreateUser(userId);
+        apiClient.Topup(userId, 2.345);
+        apiClient.Deduct(userId, 1.234);
+        User user = apiClient.GetUser(userId);
+        Assert.assertEquals(Double.valueOf(1.111), user.Balance);
     }
 }

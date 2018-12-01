@@ -8,6 +8,7 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.stmt.QueryBuilder;
 import mivanov.rev.logic.status.AddMoneyStatus;
+import mivanov.rev.logic.status.DeductMoneyStatus;
 import mivanov.rev.model.MoneyBucket;
 
 import java.sql.SQLException;
@@ -19,6 +20,20 @@ public class MoneyController {
 
     @Inject public MoneyController(JdbcPooledConnectionSource connectionSource) throws SQLException {
         moneyBucketDao = DaoManager.createDao(connectionSource, MoneyBucket.class);
+    }
+
+    public DeductMoneyStatus DeductMoney(String user, Double amount) {
+        try {
+            int rawsUpdated = moneyBucketDao.executeRaw(
+                    "update moneybucket " +
+                            "set amount = amount - ? " +
+                            "where user = ? and amount >= ? " +
+                            "limit 1", amount.toString(), user, amount.toString());
+            return DeductMoneyStatus.SUCCESS;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return DeductMoneyStatus.NOT_ENOUGH_BALANCE;
+        }
     }
 
     public AddMoneyStatus AddMoney(String user, Double amount) throws SQLException {

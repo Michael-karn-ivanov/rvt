@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="5" failures="0" name="mivanov.rev.api.UserControllerIT" time="0.548" errors="0" skipped="0">
+<testsuite tests="6" failures="1" name="mivanov.rev.api.UserControllerIT" time="0.582" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2018.3"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -62,9 +62,24 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="mivanov.rev.api.UserControllerIT" name="testSeveralTopupsSummarizeInBalance" time="0.521"/>
-  <testcase classname="mivanov.rev.api.UserControllerIT" name="testOneTopupProperlySetBalance" time="0.01"/>
-  <testcase classname="mivanov.rev.api.UserControllerIT" name="testBalanceOfJustCreatedAccountIs0" time="0.007"/>
+  <testcase classname="mivanov.rev.api.UserControllerIT" name="testDeductFromTheOnlyBucketIfEnoughBalance" time="0.536">
+    <failure message="expected:&lt;1.111&gt; but was:&lt;1.1110000000000002&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected:&lt;1.111&gt; but was:&lt;1.1110000000000002&gt;
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.junit.Assert.failNotEquals(Assert.java:743)
+	at org.junit.Assert.assertEquals(Assert.java:118)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at mivanov.rev.api.UserControllerIT.testDeductFromTheOnlyBucketIfEnoughBalance(UserControllerIT.java:87)
+</failure>
+    <system-out>09:51:12.268 [main] DEBUG api - Port set to 8080
+</system-out>
+    <system-err>SLF4J: Failed to load class &quot;org.slf4j.impl.StaticLoggerBinder&quot;.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+</system-err>
+  </testcase>
+  <testcase classname="mivanov.rev.api.UserControllerIT" name="testSeveralTopupsSummarizeInBalance" time="0.018"/>
+  <testcase classname="mivanov.rev.api.UserControllerIT" name="testOneTopupProperlySetBalance" time="0.011"/>
+  <testcase classname="mivanov.rev.api.UserControllerIT" name="testBalanceOfJustCreatedAccountIs0" time="0.006"/>
   <testcase classname="mivanov.rev.api.UserControllerIT" name="testFirstCallToCreateUserGives201" time="0.003"/>
-  <testcase classname="mivanov.rev.api.UserControllerIT" name="testSecondCallToCreateUserGives409" time="0.007"/>
+  <testcase classname="mivanov.rev.api.UserControllerIT" name="testSecondCallToCreateUserGives409" time="0.008"/>
 </testsuite>
