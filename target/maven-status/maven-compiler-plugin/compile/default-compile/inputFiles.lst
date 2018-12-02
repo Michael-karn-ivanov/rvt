@@ -3,6 +3,7 @@ C:\Dev\Java\rev\src\main\java\mivanov\rev\api\model\PaymentOrder.java
 C:\Dev\Java\rev\src\main\java\mivanov\rev\logic\status\GetUserStatus.java
 C:\Dev\Java\rev\src\main\java\mivanov\rev\logic\MoneyController.java
 C:\Dev\Java\rev\src\main\java\mivanov\rev\logic\status\CreateUserStatus.java
+C:\Dev\Java\rev\src\main\java\mivanov\rev\api\model\Utils.java
 C:\Dev\Java\rev\src\main\java\mivanov\rev\logic\status\DeductMoneyStatus.java
 C:\Dev\Java\rev\src\main\java\mivanov\rev\model\MoneyBucket.java
 C:\Dev\Java\rev\src\main\java\mivanov\rev\api\Router.java

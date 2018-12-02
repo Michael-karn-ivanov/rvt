@@ -7,6 +7,7 @@ import com.google.inject.name.Named;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import mivanov.rev.api.model.PaymentOrder;
+import mivanov.rev.api.model.Utils;
 import mivanov.rev.logic.MoneyController;
 import mivanov.rev.logic.UserController;
 import mivanov.rev.logic.status.GetUserStatus;
@@ -75,7 +76,7 @@ public class Router {
                         response.status(GetUserStatus.USER_DOESNT_EXIST.getValue());
                         return "";
                     } else {
-                        u.Balance = b;
+                        u.Balance = Utils.decorateDouble(b);
                         response.status(GetUserStatus.USER_FOUND.getValue());
                         response.type("application/json");
                         return new Gson().toJson(u);

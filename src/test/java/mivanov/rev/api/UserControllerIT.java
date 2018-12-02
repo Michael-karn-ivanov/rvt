@@ -86,4 +86,54 @@ public class UserControllerIT {
         User user = apiClient.GetUser(userId);
         Assert.assertEquals(Double.valueOf(1.111), user.Balance);
     }
+
+    @Test
+    public void testDeductFromTheOnlyBucketIfNotEnoughBalance() throws IOException {
+        String userId = UUID.randomUUID().toString();
+        apiClient.CreateUser(userId);
+        apiClient.Topup(userId, 1.0);
+        HttpResponse deductResponse = apiClient.Deduct(userId, 2.0);
+        User user = apiClient.GetUser(userId);
+        Assert.assertEquals(Double.valueOf(1), user.Balance);
+        Assert.assertEquals(402, deductResponse.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testDeductWhenMultipleBucketsAvailabe() throws IOException {
+        String userId = UUID.randomUUID().toString();
+        apiClient.CreateUser(userId);
+        apiClient.Topup(userId, 1.0);
+        apiClient.Topup(userId, 1.0);
+        apiClient.Topup(userId, 1.0);
+        HttpResponse deductResponse = apiClient.Deduct(userId, 0.9);
+        User user = apiClient.GetUser(userId);
+        Assert.assertEquals(Double.valueOf(2.1), user.Balance);
+        Assert.assertEquals(200, deductResponse.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testDeductWhenHaveToSummarizeBuckets() throws IOException {
+        String userId = UUID.randomUUID().toString();
+        apiClient.CreateUser(userId);
+        apiClient.Topup(userId, 1.0);
+        apiClient.Topup(userId, 1.0);
+        apiClient.Topup(userId, 1.0);
+        HttpResponse deductResponse = apiClient.Deduct(userId, 2.5);
+        User user = apiClient.GetUser(userId);
+        Assert.assertEquals(Double.valueOf(0.5), user.Balance);
+        Assert.assertEquals(200, deductResponse.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testDeductWhenNotEnoughAfterSummarization() throws IOException {
+        String userId = UUID.randomUUID().toString();
+        apiClient.CreateUser(userId);
+        apiClient.Topup(userId, 1.0);
+        apiClient.Topup(userId, 1.0);
+        apiClient.Topup(userId, 1.0);
+        HttpResponse deductResponse = apiClient.Deduct(userId, 5.0);
+        User user = apiClient.GetUser(userId);
+        Assert.assertEquals(Double.valueOf(3), user.Balance);
+        Assert.assertEquals(402, deductResponse.getStatusLine().getStatusCode());
+    }
 }
