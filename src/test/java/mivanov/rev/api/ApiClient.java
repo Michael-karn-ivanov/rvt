@@ -51,4 +51,14 @@ public class ApiClient {
         spendRequest.setEntity(new StringEntity(new Gson().toJson(order)));
         return HttpClientBuilder.create().build().execute( spendRequest );
     }
+
+    public HttpResponse Transfer(String from, String to, Double amount) throws IOException {
+        HttpPut transferRequest = new HttpPut(String.format("http://localhost:%d/transfer/%s", port, from));
+        transferRequest.addHeader("content-type", "application/json");
+        PaymentOrder order = new PaymentOrder();
+        order.setToUser(to);
+        order.setAmount(amount);
+        transferRequest.setEntity(new StringEntity(new Gson().toJson(order)));
+        return HttpClientBuilder.create().build().execute( transferRequest );
+    }
 }

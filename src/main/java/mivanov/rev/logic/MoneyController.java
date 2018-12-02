@@ -10,6 +10,7 @@ import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.stmt.QueryBuilder;
 import mivanov.rev.logic.status.AddMoneyStatus;
 import mivanov.rev.logic.status.DeductMoneyStatus;
+import mivanov.rev.logic.status.MoneyTransferStatus;
 import mivanov.rev.model.MoneyBucket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -87,5 +88,24 @@ public class MoneyController {
         } catch (SQLException exception) {
             return null;
         }
+    }
+
+    public MoneyTransferStatus Transfer(String userFrom, String userTo, Double amount) throws Exception {
+        DeductMoneyStatus deductStatus = DeductMoney(userFrom, amount);
+        if (deductStatus.equals(DeductMoneyStatus.NOT_ENOUGH_BALANCE))
+            return MoneyTransferStatus.NOT_ENOUGH_BALANCE;
+        if (deductStatus.equals(DeductMoneyStatus.DEDUCTION_ERROR))
+            return MoneyTransferStatus.DEDUCTION_ERROR;
+        if (deductStatus.equals(DeductMoneyStatus.SUCCESS)) {
+            try {
+                AddMoney(userTo, amount);
+                return MoneyTransferStatus.SUCCESS;
+            } catch (SQLException e) {
+                AddMoney(userFrom, amount);
+                return MoneyTransferStatus.PLEASE_RETRY;
+            }
+        }
+        logger.error("Unknown deduction status code: %d", deductStatus.getValue());
+        throw new Exception();
     }
 }

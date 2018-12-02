@@ -136,4 +136,39 @@ public class UserControllerIT {
         Assert.assertEquals(Double.valueOf(3), user.Balance);
         Assert.assertEquals(402, deductResponse.getStatusLine().getStatusCode());
     }
+
+    @Test
+    public void testTransferWhenNotEnoughMoney() throws IOException {
+        String fromUser = UUID.randomUUID().toString();
+        String toUser = UUID.randomUUID().toString();
+        apiClient.CreateUser(fromUser);
+        apiClient.CreateUser(toUser);
+        apiClient.Topup(fromUser, 5.0);
+        apiClient.Topup(fromUser, 3.0);
+        apiClient.Topup(toUser, 1.0);
+        HttpResponse transferResponse = apiClient.Transfer(fromUser, toUser, 10.0);
+        User from = apiClient.GetUser(fromUser);
+        User to = apiClient.GetUser(toUser);
+        Assert.assertEquals(402, transferResponse.getStatusLine().getStatusCode());
+        Assert.assertEquals(Double.valueOf(8), from.Balance);
+        Assert.assertEquals(Double.valueOf(1), to.Balance);
+    }
+
+    @Test
+    public void testTransferWhenEnoughMoney() throws IOException {
+        String fromUser = UUID.randomUUID().toString();
+        String toUser = UUID.randomUUID().toString();
+        apiClient.CreateUser(fromUser);
+        apiClient.CreateUser(toUser);
+        apiClient.Topup(fromUser, 5.0);
+        apiClient.Topup(fromUser, 3.0);
+        apiClient.Topup(fromUser, 4.0);
+        apiClient.Topup(toUser, 1.0);
+        HttpResponse transferResponse = apiClient.Transfer(fromUser, toUser, 10.0);
+        User from = apiClient.GetUser(fromUser);
+        User to = apiClient.GetUser(toUser);
+        Assert.assertEquals(200, transferResponse.getStatusLine().getStatusCode());
+        Assert.assertEquals(Double.valueOf(2), from.Balance);
+        Assert.assertEquals(Double.valueOf(11), to.Balance);
+    }
 }
