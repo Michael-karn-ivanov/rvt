@@ -24,3 +24,5 @@
   testing of implemented approach.
 - API itself - it's kind of okay. In reality I would not use user performing operation as a parameter, since it should be some 
   authentication token.
+## summary
+it was honest 8 hours I think (I don't count time I spent thinking on a task in tube:)). If I would have more time, I did load testing, refactor API itself. Ideally I would split front-end and business logic by layers, adding queues between them. And many more:) But okay, it was 8 hours exercise
